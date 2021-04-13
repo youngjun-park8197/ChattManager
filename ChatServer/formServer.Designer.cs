@@ -29,15 +29,21 @@ namespace ChatServer
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.sbStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.tbSend = new System.Windows.Forms.TextBox();
             this.tbReceive = new System.Windows.Forms.TextBox();
+            this.btnSend = new System.Windows.Forms.Button();
             this.btnServStart = new System.Windows.Forms.Button();
             this.tbServPort = new System.Windows.Forms.TextBox();
             this.lblServPort = new System.Windows.Forms.Label();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuSend = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -46,6 +52,7 @@ namespace ChatServer
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -58,11 +65,19 @@ namespace ChatServer
             // 
             // statusStrip1
             // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sbStatusLabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 428);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(800, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // sbStatusLabel
+            // 
+            this.sbStatusLabel.Name = "sbStatusLabel";
+            this.sbStatusLabel.Size = new System.Drawing.Size(40, 17);
+            this.sbStatusLabel.Text = "Status";
             // 
             // splitContainer1
             // 
@@ -76,6 +91,7 @@ namespace ChatServer
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.btnSend);
             this.splitContainer1.Panel2.Controls.Add(this.btnServStart);
             this.splitContainer1.Panel2.Controls.Add(this.tbServPort);
             this.splitContainer1.Panel2.Controls.Add(this.lblServPort);
@@ -105,26 +121,38 @@ namespace ChatServer
             this.tbSend.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbSend.Location = new System.Drawing.Point(4, 34);
+            this.tbSend.ContextMenuStrip = this.contextMenuStrip1;
+            this.tbSend.Location = new System.Drawing.Point(4, 3);
             this.tbSend.Multiline = true;
             this.tbSend.Name = "tbSend";
-            this.tbSend.Size = new System.Drawing.Size(273, 367);
+            this.tbSend.Size = new System.Drawing.Size(273, 398);
             this.tbSend.TabIndex = 0;
+            this.tbSend.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbSend_KeyUp);
             // 
             // tbReceive
             // 
             this.tbReceive.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbReceive.Location = new System.Drawing.Point(4, 34);
+            this.tbReceive.Location = new System.Drawing.Point(4, 3);
             this.tbReceive.Multiline = true;
             this.tbReceive.Name = "tbReceive";
-            this.tbReceive.Size = new System.Drawing.Size(283, 367);
+            this.tbReceive.Size = new System.Drawing.Size(283, 398);
             this.tbReceive.TabIndex = 0;
+            // 
+            // btnSend
+            // 
+            this.btnSend.Location = new System.Drawing.Point(72, 60);
+            this.btnSend.Name = "btnSend";
+            this.btnSend.Size = new System.Drawing.Size(75, 23);
+            this.btnSend.TabIndex = 3;
+            this.btnSend.Text = "Send";
+            this.btnSend.UseVisualStyleBackColor = true;
+            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
             // btnServStart
             // 
-            this.btnServStart.Location = new System.Drawing.Point(73, 58);
+            this.btnServStart.Location = new System.Drawing.Point(72, 30);
             this.btnServStart.Name = "btnServStart";
             this.btnServStart.Size = new System.Drawing.Size(75, 23);
             this.btnServStart.TabIndex = 2;
@@ -134,7 +162,7 @@ namespace ChatServer
             // 
             // tbServPort
             // 
-            this.tbServPort.Location = new System.Drawing.Point(73, 31);
+            this.tbServPort.Location = new System.Drawing.Point(72, 3);
             this.tbServPort.Name = "tbServPort";
             this.tbServPort.Size = new System.Drawing.Size(100, 21);
             this.tbServPort.TabIndex = 1;
@@ -142,11 +170,25 @@ namespace ChatServer
             // lblServPort
             // 
             this.lblServPort.AutoSize = true;
-            this.lblServPort.Location = new System.Drawing.Point(4, 34);
+            this.lblServPort.Location = new System.Drawing.Point(3, 6);
             this.lblServPort.Name = "lblServPort";
             this.lblServPort.Size = new System.Drawing.Size(63, 12);
             this.lblServPort.TabIndex = 0;
             this.lblServPort.Text = "ServerPort";
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuSend});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 48);
+            // 
+            // mnuSend
+            // 
+            this.mnuSend.Name = "mnuSend";
+            this.mnuSend.Size = new System.Drawing.Size(180, 22);
+            this.mnuSend.Text = "Send";
+            this.mnuSend.Click += new System.EventHandler(this.mnuSend_Click);
             // 
             // FormServer
             // 
@@ -160,6 +202,9 @@ namespace ChatServer
             this.Name = "FormServer";
             this.Text = "ChatServer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormServer_FormClosing);
+            this.Load += new System.EventHandler(this.FormServer_Load);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
@@ -171,6 +216,7 @@ namespace ChatServer
             this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -187,6 +233,10 @@ namespace ChatServer
         private System.Windows.Forms.Button btnServStart;
         private System.Windows.Forms.TextBox tbServPort;
         private System.Windows.Forms.Label lblServPort;
+        private System.Windows.Forms.ToolStripStatusLabel sbStatusLabel;
+        private System.Windows.Forms.Button btnSend;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem mnuSend;
     }
 }
 

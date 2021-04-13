@@ -178,7 +178,7 @@ namespace ChattManager
             // 
             // btnSend
             // 
-            this.btnSend.Location = new System.Drawing.Point(7, 58);
+            this.btnSend.Location = new System.Drawing.Point(84, 58);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 23);
             this.btnSend.TabIndex = 4;
@@ -188,7 +188,7 @@ namespace ChattManager
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(7, 29);
+            this.btnConnect.Location = new System.Drawing.Point(84, 29);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(75, 23);
             this.btnConnect.TabIndex = 3;

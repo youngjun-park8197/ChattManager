@@ -58,31 +58,57 @@ namespace ChattManager
         Thread threadClient = null;
         Socket sock = null;
         private void btnConnect_Click(object sender, EventArgs e)
-        {
-            if(sock == null)
-            {
-                sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            }
-
+        { 
             try
             {
-                sock.Connect(tbIP.Text, int.Parse(tbPort.Text));
-            } 
-            
-            catch
-            {
+                if (sock == null)
+                {
+                    sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp); // 소켓이 연결되어 있지 않는 경우에는 소켓을 생성
+                }
 
+                else
+                {
+                    if(threadClient != null)
+                    {
+                        threadClient.Abort(); // 소켓을 닫을때는 쓰레드도 같이 닫는 작업 수행 필요
+                        threadClient = null;
+                    }
+                    sock.Close();
+                    sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                }
+
+                // sock.Connect(tbIP.Text, int.Parse(tbPort.Text));
+                Thread ConThread = new Thread(ConnectProcess);// (스레드 안에서 소켓 연결 사용)
+                ConThread.Start();
+
+                /* 
+                while(true)
+                {
+                    if (sock.Connected) break;
+                }
+                */
+
+                sbLabelIP.Text = ((IPEndPoint)(sock.RemoteEndPoint)).Address.ToString();
+                sbLabelPort.Text = ((IPEndPoint)(sock.RemoteEndPoint)).Port.ToString();
+                // sock.RemoteEndPoint.ToString(); // ex) 127.0.0.1:12345 (12345는 명목상 포트번호, 실제적으로는 세션값)
+
+                if (threadClient == null)
+                {
+                    threadClient = new Thread(ClientProcess);
+                    threadClient.Start();
+                }
             }
 
-            sbLabelIP.Text = ((IPEndPoint)(sock.RemoteEndPoint)).Address.ToString();
-            sbLabelPort.Text = ((IPEndPoint)(sock.RemoteEndPoint)).Port.ToString();
-            // sock.RemoteEndPoint.ToString(); // ex) 127.0.0.1:12345 (12345는 명목상 포트번호, 실제적으로는 세션값)
-
-            if(threadClient == null)
+            catch(Exception e1)
             {
-                threadClient = new Thread(ClientProcess);
-                threadClient.Start();
+                tbReceive.AppendText(e1.Message + "\r\n"); // 소켓의 연결을 시도
             }
+        }
+
+
+        void ConnectProcess()
+        {
+            sock.Connect(tbIP.Text, int.Parse(tbPort.Text));
         }
 
 
@@ -91,7 +117,7 @@ namespace ChattManager
             while(true)
             {
                 int num = sock.Available;
-                if (num > 0)
+                if (num > 0 && sock.Connected)
                 {
                     byte[] bArr = new byte[num]; // C#에서의 통신은 byte[] 배열로 주고받음, C/C++는 char
                     sock.Receive(bArr);
@@ -105,12 +131,24 @@ namespace ChattManager
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            if(sock.Connected == true)
+            try
             {
-                string str = tbSend.Text;
-                string[] sArr = str.Split('\r'); // multi line \r\n
-                string sLast = sArr[sArr.Length - 1];
-                sock.Send(Encoding.Default.GetBytes(sLast));
+                if (sock.Connected == true)
+                {
+                    string str = tbSend.Text.Trim();
+                    string[] sArr = str.Split('\r'); // multi line \r\n
+                    string sLast = sArr[sArr.Length - 1];
+                    sock.Send(Encoding.Default.GetBytes(sLast));
+                }
+                else
+                {
+                    AddText("Cannot connect to Server.. \r\n Check Connection again.");
+                }
+            }
+
+            catch(Exception e1)
+            {
+                AddText(e1.Message);
             }
         }
 
